@@ -1,0 +1,8 @@
+{
+   "ArtifactoryHost": "http://10.1.16.13:8080",
+   "DefaultUIPort": "9015",
+   "DefaultV1Port": "9011",
+   "DefaultV2Port": "9012",
+   "V1RepoKey": "docker-local-v1",
+   "V2RepoKey": "docker-local-v2"
+}
