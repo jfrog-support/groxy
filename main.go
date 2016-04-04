@@ -164,10 +164,11 @@ func loadConf() (configuration Conf) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// validate .groxy/groxy.json exists
+	// validate .groxy/config.json exists
 	// TODO: add support for windows
 	if _, err = os.Stat(usr.HomeDir + "/.groxy/config.json"); os.IsNotExist(err) {
-		fmt.Println("WARNING: groxy.json could not be found!")
+		fmt.Println("WARNING: ~/.groxy/config.json could not be found!")
+		return 
 	}
 	confFile, _ := os.Open(usr.HomeDir + "/.groxy/config.json")
 	decoder := json.NewDecoder(confFile)
