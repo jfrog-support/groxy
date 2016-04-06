@@ -2,12 +2,14 @@
 
 Groxy is a simple reverse proxy written in Go, adapted to work with Artifactory and the Bintray Development environment. It can be used to proxy the Artifactory and Bintray UIs, as well as Docker V2 & V1 repositories.
 
-### Installation ###
+## Installation ##
 
-## Docker ##
+### Docker ###
 `docker pull jfrog-support-docker-registry.bintray.io/jfrog-support/groxy`
 
 `docker run --name=groxy -d -p 9010:9010 -p 9011:9011 -p 9012:9012 jfrog-support-docker-registry.bintray.io/jfrog-support/groxy`
+
+## Manual ##
 
 1.Download the groxy executable from [Bintray](https://bintray.com/uriahl/generic/Groxy/view)
 
