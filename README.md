@@ -1,4 +1,4 @@
-## Groxy - A simple Gofer-powered reverse proxy ##
+## Groxy - A simple Gopher-powered reverse proxy ##
 
 Groxy is a simple reverse proxy written in Go, adapted to work with Artifactory and the Bintray Development environment. It can be used to proxy the Artifactory and Bintray UIs, as well as Docker V2 & V1 repositories.
 
