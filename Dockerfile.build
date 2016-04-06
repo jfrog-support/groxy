@@ -1,0 +1,9 @@
+FROM golang
+MAINTAINER Uriah L. "uriahl@jfrog.com"
+ADD Makefile /
+WORKDIR /
+RUN make setup
+
+ADD ./main.go /go/src/github.com/jfrog-support/groxy/
+RUN make buildgo
+CMD ["/bin/bash"]

@@ -1,0 +1,12 @@
+FROM tianon/true
+MAINTAINER Uriah L. "uriahl@jfrog.com"
+EXPOSE 9010
+EXPOSE 9011
+EXPOSE 9012 
+
+COPY config.json /config.json
+
+ADD groxy /groxy
+ADD main /
+
+CMD ["/main"]

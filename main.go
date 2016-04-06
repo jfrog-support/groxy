@@ -11,7 +11,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-	"os/user"
+
 	"regexp"
 	"strings"
 
@@ -158,28 +158,51 @@ func printer(uiPort string, v1Port string, v2Port string, artifactoryTarget stri
 	//color.Unset()
 }
 
-func loadConf() (configuration Conf) {
-	// make sure we can access $HOME
-	usr, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
-	// validate .groxy/config.json exists
-	// TODO: add support for windows
-	if _, err = os.Stat(usr.HomeDir + "/.groxy/config.json"); os.IsNotExist(err) {
-		fmt.Println("WARNING: ~/.groxy/config.json could not be found!")
-		return 
-	}
-	confFile, _ := os.Open(usr.HomeDir + "/.groxy/config.json")
-	decoder := json.NewDecoder(confFile)
-	configuration = Conf{}
-	err = decoder.Decode(&configuration)
-	if err != nil {
-		fmt.Println("WARNING: error decoding JSON! verify the validity of your JSON", err)
+func loadConf(location string) (configuration Conf) {
+	// groxy can run in two conf modes:
+	// 1.Host mode - the config.json location should be passed with the -conf flag for groxy.
+	// If the param isn't being passed, groxy assumes the file to be under /
+	// 2.Docker mode - the conf file is assumed to be placed under /
+	// Docker mode is indicated by the DOCKER_MODE env variable
+
+	// We can't use usr.Current() since it's not supported with cross-compiled binaries :(
+	// https://github.com/golang/go/issues/6376
+
+	// Docker mode:
+	if os.Getenv("DOCKER_MODE") == "true" {
+		confFile, _ := os.Open("/config.json")
+		decoder := json.NewDecoder(confFile)
+		configuration = Conf{}
+		err := decoder.Decode(&configuration)
+		if err != nil {
+			fmt.Println("WARNING: error decoding JSON! verify the validity of your JSON", err)
+		} else {
+			Info.Println("config.json was loaded")
+		}
+		return configuration
 	} else {
-		Info.Println("~/.groxy/config.json was loaded")
+		// Host mode:
+		// validate ~/.groxy/config.json exists
+		// TODO: add support for windows
+		//if _, err = os.Stat(usr.HomeDir + "/.groxy/config.json"); os.IsNotExist(err) {
+		//	fmt.Println("WARNING: ~/.groxy/config.json could not be found!")
+		//	return
+		//}
+		if _, err := os.Stat(location); os.IsNotExist(err) {
+			Error.Println("ERROR: config.json could not be found!")
+		return
+		}
+		confFile, _ := os.Open(location)
+		decoder := json.NewDecoder(confFile)
+		configuration = Conf{}
+		err := decoder.Decode(&configuration)
+		if err != nil {
+			Error.Println("error decoding JSON! verify the validity of your JSON", err)
+		} else {
+			Info.Println("config.json was loaded")
+		}
+		return configuration
 	}
-	return configuration
 }
 
 func initLoggers(
@@ -219,17 +242,20 @@ func main() {
 		defaultV1PortUsage      = "default server port for V1 traffic"
 		defaultV2PortUsage      = "default server port for V2 traffic"
 		defaultArtifactoryUsage = "default redirect url, 'http://127.0.0.1:8080'"
+		defaultConf		= "/"
+		defaultConfUsage	= "Location of config.json"
 	)
 
-	configuration := loadConf()
-
 	// flags
-	var uiPortFlag, v1PortFlag, v2PortFlag, artifactoryFlag string
+	var confLocation, uiPortFlag, v1PortFlag, v2PortFlag, artifactoryFlag string
 	flag.StringVar(&uiPortFlag, "uiPort", defaultUIPort, defaultUIPortUsage)
 	flag.StringVar(&v1PortFlag, "v1Port", defaultV1Port, defaultV1PortUsage)
 	flag.StringVar(&v2PortFlag, "v2Port", defaultV2Port, defaultV2PortUsage)
 	flag.StringVar(&artifactoryFlag, "artifactory", defaultArtifactory, defaultArtifactoryUsage)
+	flag.StringVar(&confLocation, "conf", defaultConf, defaultConfUsage)
 	flag.Parse()
+
+	configuration := loadConf(confLocation)
 
 	// conf provided parameters always override flags
 	var artifactoryTarget, uiPort, v1Port, v2Port string
