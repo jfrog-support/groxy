@@ -28,7 +28,7 @@ Monitor incoming traffic and upstream response by running `docker logs -f groxy`
 ```
 {
    "ArtifactoryHost": "http://localhost:8080",
-   "DefaultUIPort": "9015",
+   "DefaultUIPort": "9010",
    "DefaultV1Port": "9011",
    "DefaultV2Port": "9012",
    "V1RepoKey": "docker-local-v1",

@@ -117,13 +117,11 @@ func (h *v2Handler) handleFunc(w http.ResponseWriter, r *http.Request) {
 func (t *myTransport) RoundTrip(request *http.Request) (*http.Response, error) {
 	response, err := http.DefaultTransport.RoundTrip(request)
 	if err != nil {
-		//Error.Println(err)
 		return nil, err
 	}
 	// get body bytes
 	body, err := httputil.DumpResponse(response, true)
 	if err != nil {
-		//Error.Println(err)
 		return nil, err
 	}
 
@@ -149,20 +147,18 @@ func (h *v1Handler) handleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func printer(uiPort string, v1Port string, v2Port string, artifactoryTarget string) {
-	//color.Set(color.BgGreen)
 	fmt.Println("#### Groxy - v0.1 ####")
 	fmt.Println("Listening for UI traffic on port", uiPort)
 	fmt.Println("Listening for V1 traffic on port", v1Port)
 	fmt.Println("Listening for V2 traffic on port", v2Port)
-	fmt.Println("Proxying:" + artifactoryTarget)
-	//color.Unset()
+	fmt.Println("Proxying: " + artifactoryTarget)
 }
 
 func loadConf(location string) (configuration Conf) {
 	// groxy can run in two conf modes:
-	// 1.Host mode - the config.json location should be passed with the -conf flag for groxy.
+	// 1.Host mode - the config.json location should be passed with the '-conf' flag for groxy.
 	// If the param isn't being passed, groxy assumes the file to be under /
-	// 2.Docker mode - the conf file is assumed to be placed under /
+	// 2.Docker mode - the conf file is assumed to be placed under /. No need to pass the -conf param
 	// Docker mode is indicated by the DOCKER_MODE env variable
 
 	// We can't use usr.Current() since it's not supported with cross-compiled binaries :(
@@ -190,7 +186,7 @@ func loadConf(location string) (configuration Conf) {
 		//}
 		if _, err := os.Stat(location); os.IsNotExist(err) {
 			Error.Println("ERROR: config.json could not be found!")
-		return
+			return
 		}
 		confFile, _ := os.Open(location)
 		decoder := json.NewDecoder(confFile)
@@ -242,8 +238,8 @@ func main() {
 		defaultV1PortUsage      = "default server port for V1 traffic"
 		defaultV2PortUsage      = "default server port for V2 traffic"
 		defaultArtifactoryUsage = "default redirect url, 'http://127.0.0.1:8080'"
-		defaultConf		= "/"
-		defaultConfUsage	= "Location of config.json"
+		defaultConf             = "/"
+		defaultConfUsage        = "Location of config.json"
 	)
 
 	// flags
