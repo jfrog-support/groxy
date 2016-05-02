@@ -5,10 +5,11 @@ Groxy is a simple reverse proxy written in Go, adapted to work with Artifactory.
 ## Installation ##
 
 ### Docker ###
+1.
 ```bash 
 docker pull jfrog-support-docker-registry.bintray.io/jfrog-support/groxy
 ```
-1.Create the ~/.groxy/config.json file:
+2.Create the ~/.groxy/config.json file:
 
 
 ```
@@ -22,7 +23,7 @@ docker pull jfrog-support-docker-registry.bintray.io/jfrog-support/groxy
 }
 ```
 
-2.
+3.
 ```bash
 docker run -e DOCKER_MODE=true --name=groxy -d \
   -p 9010:9010 -p 9011:9011 -p 9012:9012 \
