@@ -1,6 +1,6 @@
 ## Groxy - A simple Gopher-powered reverse proxy ##
 
-Groxy is a simple reverse proxy written in Go, adapted to work with Artifactory and the Bintray Development environment. It can be used to proxy the Artifactory and Bintray UIs, as well as Docker V2 & V1 repositories.
+Groxy is a simple reverse proxy written in Go, adapted to work with Artifactory. It can be used to proxy the Artifactory UI, as well as Docker V2 & V1 repositories.
 
 ## Installation ##
 
@@ -20,6 +20,8 @@ Monitor incoming traffic and upstream response by running `docker logs -f groxy`
 
 ## Manual ##
 
+*The binary is compiled only for Darwin (OS X) at this time, it's recommended that you use that docker image instead*
+
 1.Download the groxy executable from [Bintray](https://bintray.com/uriahl/generic/Groxy/view)
 
 2.Create the ~/.groxy/config.json file:
@@ -36,4 +38,12 @@ Monitor incoming traffic and upstream response by running `docker logs -f groxy`
 }
 ```
 
-3.run the groxy executable. Groxy will print incoming request and upstream response information, enabling easy HTTP debugging.
+3. Add groxy to your path export PATH=$PATH:/path/to/groxy/executable
+
+4.run the groxy executable:
+
+```bash
+groxy --conf=/Users/{you}/.groxy/config.json
+```
+
+Groxy will print incoming request and upstream response information, enabling easy HTTP debugging.
