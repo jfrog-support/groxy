@@ -37,7 +37,7 @@ Monitor incoming traffic and upstream response by running `docker logs -f groxy`
 
 *The binary is compiled only for Darwin (OS X) at this time, it's recommended that you use that docker image instead*
 
-1.Download the groxy executable from [Bintray](https://bintray.com/uriahl/generic/Groxy/view)
+1.Download the groxy executable from [Bintray](https://bintray.com/jfrog-support/groxy/groxy/view)
 
 2.Create the ~/.groxy/config.json file:
 
