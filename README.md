@@ -14,7 +14,7 @@ docker pull jfrog-support-docker-registry.bintray.io/jfrog-support/groxy
 
 ```
 {
-   "ArtifactoryHost": "http://localhost:8080",
+   "ArtifactoryHost": "http://<ARTIFACTORY_HOST>:8080",
    "DefaultUIPort": "9010",
    "DefaultV1Port": "9011",
    "DefaultV2Port": "9012",
