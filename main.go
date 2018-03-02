@@ -32,7 +32,9 @@ var (
 )
 
 const (
-	dockerContextPath = "/artifactory/api/docker/"
+	dockerContextPath      = "/artifactory/api/docker/"
+	groxyVersionHeaderName = "X-Groxy-Version"
+	groxyVersion           = "0.1"
 )
 
 // Conf Configuration
@@ -97,7 +99,7 @@ func newProxy(target string, path string, repoKey string) *prox {
 // handler for UI requests
 func (h *uiHandler) handleFunc(w http.ResponseWriter, r *http.Request) {
 	Info.Println(r.UserAgent()+":"+r.Method, r.URL.Path, r.Body)
-	w.Header().Set("X-Groxy-Vesrion", "0.1")
+	w.Header().Set(groxyVersionHeaderName, groxyVersion)
 	path := r.URL.Path
 	p := newProxy(h.ArtifactoryHost, path, "")
 	p.proxy.Transport = &myTransport{}
@@ -107,7 +109,7 @@ func (h *uiHandler) handleFunc(w http.ResponseWriter, r *http.Request) {
 // handler for v2 requests
 func (h *v2Handler) handleFunc(w http.ResponseWriter, r *http.Request) {
 	Info.Println(r.UserAgent()+":"+r.Method, r.URL.Path, r.Body)
-	w.Header().Set("X-Groxy-Vesrion", "0.1")
+	w.Header().Set(groxyVersionHeaderName, groxyVersion)
 	path := r.URL.Path
 	p := newProxy(h.ArtifactoryHost, path, h.RepoKey)
 	p.proxy.Transport = &myTransport{}
@@ -140,14 +142,14 @@ func (h *v1Handler) handleFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Info.Println(r.UserAgent()+":"+r.Method, r.URL.Path, r.Body)
-	r.Header.Add("X-Groxy-Version", "0.1")
+	r.Header.Add(groxyVersionHeaderName, groxyVersion)
 	p := newProxy(h.ArtifactoryHost, r.URL.Path, h.RepoKey)
 	p.proxy.Transport = &myTransport{}
 	p.proxy.ServeHTTP(w, r)
 }
 
 func printer(uiPort string, v1Port string, v2Port string, artifactoryTarget string) {
-	fmt.Println("#### Groxy - v0.1 ####")
+	fmt.Println("#### Groxy - v" + groxyVersion + " ####")
 	fmt.Println("Listening for UI traffic on port", uiPort)
 	fmt.Println("Listening for V1 traffic on port", v1Port)
 	fmt.Println("Listening for V2 traffic on port", v2Port)
